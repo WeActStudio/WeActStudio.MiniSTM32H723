@@ -76,7 +76,6 @@ static void MPU_Config(void);
   */
 static void RTC_CalendarShow(RTC_DateTypeDef *sdatestructureget,RTC_TimeTypeDef *stimestructureget)
 {
-  /* ����ͬʱ��ȡʱ������� ��Ȼ�ᵼ���´�RTC���ܶ�ȡ */
   /* Both time and date must be obtained or RTC cannot be read next time */
   /* Get the RTC current Time */
   HAL_RTC_GetTime(&hrtc, stimestructureget, RTC_FORMAT_BIN);
@@ -122,14 +121,17 @@ int main(void)
   /* USER CODE BEGIN 2 */
 	board_button_init();
 	board_led_init();
-	
+
 	LCD_Test();
-	
+
 	uint8_t text[20];
 	RTC_DateTypeDef sdatestructureget;
 	RTC_TimeTypeDef stimestructureget;
-	
+
 	uint32_t tick_now,tick_time;
+	
+  tick_now = HAL_GetTick();
+  tick_time = tick_now;
   /* USER CODE END 2 */
 
   /* Infinite loop */
