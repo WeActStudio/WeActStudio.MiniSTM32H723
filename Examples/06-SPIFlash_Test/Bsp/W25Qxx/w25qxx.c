@@ -100,6 +100,7 @@ uint8_t W25Qx_WriteEnable(void)
 /   0XEF14,表示芯片型号为W25Q16     
 /   0XEF15,表示芯片型号为W25Q32   
 /   0XEF16,表示芯片型号为W25Q64  
+/   0X8516,表示芯片型号为PY25Q64
   * @retval None
   */
 void W25Qx_Read_ID(uint16_t *ID)
@@ -147,6 +148,7 @@ void W25Qx_Read_JEDECID(uint32_t *JEDECID)
 uint8_t W25Qx_Get_Parameter(W25Qx_Parameter *Para)
 {
 	uint16_t id;
+	uint8_t device_id;
 	uint32_t size;
 	
 	Para->PAGE_SIZE = 256;
@@ -154,11 +156,12 @@ uint8_t W25Qx_Get_Parameter(W25Qx_Parameter *Para)
 	Para->SECTOR_SIZE = 0x10000;
 	
 	W25Qx_Read_ID(&id);
-	if(id < W25Q80 || id > W25Q128) return W25Qx_ERROR;
+	device_id = id & 0xff;
+	if(device_id < x25Q80 || device_id > x25Q128) return W25Qx_ERROR;
 	
     W25Qx_Read_JEDECID(&Para->FLASH_JEDECID);
     
-	size = (uint32_t) powf(2,(id - 0xEF13)) * 1024 * 1024;
+	size = (uint32_t) powf(2,(device_id - x25Q80)) * 1024 * 1024;
 	
 	Para->FLASH_Id = id;
 	Para->FLASH_Size = size;
